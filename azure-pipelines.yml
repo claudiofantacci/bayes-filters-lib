@@ -1,0 +1,35 @@
+# C/C++ with GCC
+# Build your C/C++ project with GCC using make.
+# Add steps that publish test results, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/c-cpp/gcc
+
+trigger:
+  - devel
+
+pr:
+  - devel
+    
+jobs:
+- job: Ubuntu1604
+  displayName: 'Build on Ubuntu 16.04'
+  timeoutInMinutes: 0
+
+  pool:
+    vmImage: 'Ubuntu 16.04'
+
+  steps:
+  - script: |
+      sudo apt-get install -y libeigen3-dev
+    displayName: 'Install dependencies'
+  
+  - script: |
+      mkdir build
+      cd build
+      cmake .. -DBUILD_TESTING:BOOL=ON
+      make
+    displayName: 'Build library'
+    
+  - script: |
+      cd build
+      ctest -VV
+    displayName: 'Test library'
