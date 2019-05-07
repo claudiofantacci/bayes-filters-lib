@@ -81,7 +81,7 @@ void Resampling::resample(const ParticleSet& cor_particles, ParticleSet& res_par
         res_particles.state(j) = cor_particles.state(idx_csw);
         res_particles.mean(j) = cor_particles.mean(idx_csw);
         res_particles.covariance(j) = cor_particles.covariance(idx_csw);
-        res_particles.weight(j) = -log(num_particles);
+        res_particles.weight(j) = -std::log(num_particles);
         res_parents(j) = idx_csw;
     }
 }

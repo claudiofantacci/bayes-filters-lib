@@ -97,7 +97,7 @@ void ResamplingWithPrior::resample(const ParticleSet& cor_particles, ParticleSet
     res_particles = std::move(res_particles_left + res_particles_right);
 
     /* Reset weights.*/
-    res_particles.weight().setConstant(-log(cor_particles.state().cols()));
+    res_particles.weight().setConstant(-std::log(cor_particles.state().cols()));
 
     /* Since num_prior_particles were created from scratch,
        they do not have a parent. */
