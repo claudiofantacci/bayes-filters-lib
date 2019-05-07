@@ -243,7 +243,7 @@ VectorXd EstimatesExtraction::map
      * Saha, S., Boers, Y., Driessen, H., Mandal, P. K., Bagchi, A. (2009),
      * 'Particle Based MAP State Estimation: A Comparison.',
      * 12th International Conference on Information Fusion,
-     * Seattle, WA, USA, July 6-9, 2009. 
+     * Seattle, WA, USA, July 6-9, 2009.
      *
      * The equation is rewritten in order to work in the log space.
      */

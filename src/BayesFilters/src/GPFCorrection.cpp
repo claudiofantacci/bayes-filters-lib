@@ -108,7 +108,8 @@ void GPFCorrection::correctStep(const bfl::ParticleSet& pred_particles, bfl::Par
     VectorXd transition_probability = state_model_->getTransitionProbability(pred_particles.state(), corr_particles.state());
 
     /* Update weights in the log space.
-     w_{k} = w_{k-1} + log(likelihood) + log(transition_probability) - log(proposal_distribution) */
+     * w_{k} = w_{k-1} + log(likelihood) + log(transition_probability) - log(proposal_distribution)
+     */
     double eps = std::numeric_limits<double>::min();
     for (std::size_t i = 0; i < pred_particles.components; i++)
     {

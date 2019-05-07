@@ -229,8 +229,9 @@ private:
         virtual ~placeholder()
         { }
 
-    public:
+
         virtual const std::type_info& type() const noexcept = 0;
+
 
         virtual placeholder* clone() const = 0;
 
@@ -265,14 +266,16 @@ private:
 
         ValueType held;
 
+
     private:
-        holder& operator=(const holder &);
+        /* Intentionally left unimplemented. */
+        holder& operator=(const holder&);
     };
 
 
-private:
     template<typename ValueType>
-    friend ValueType* any_cast(any*) noexcept;
+    friend ValueType* any_cast(any* operand) noexcept;
+
 
     placeholder* content;
 };
@@ -375,6 +378,7 @@ template<typename ValueType>
 inline ValueType any_cast(const any& operand)
 {
     typedef typename std::remove_reference<ValueType>::type nonref;
+
     return any_cast<const nonref&>(const_cast<any&>(operand));
 }
 
@@ -390,8 +394,7 @@ inline ValueType any_cast(const any& operand)
 template<typename ValueType>
 inline ValueType any_cast(any&& operand)
 {
-    static_assert(std::is_rvalue_reference<ValueType&&>::value || std::is_const<typename std::remove_reference<ValueType>::type>::value,
-        "any_cast shall not be used for getting nonconst references to temporary objects");
+    static_assert(std::is_rvalue_reference<ValueType&&>::value || std::is_const<typename std::remove_reference<ValueType>::type>::value, "any_cast shall not be used for getting nonconst references to temporary objects");
 
     return any_cast<ValueType>(operand);
 }
