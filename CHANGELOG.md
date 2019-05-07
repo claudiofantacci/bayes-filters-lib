@@ -23,6 +23,7 @@
 - Renamed Logger::get_prefix_path() in Logger::get_folder_path().
 - Renamed Logger::get_prefix_name() in Logger::get_file_name_prefix().
 - Logger::enable_log() now requires absolute or relative paths as input.
+- utils.h is now a template header-only utility file.
 
 ##### `Filtering functions`
 - Added pure public virtual method GaussianPrediction::getStateModel() (required to properly implement GPFPrediction::getStateModel()).
