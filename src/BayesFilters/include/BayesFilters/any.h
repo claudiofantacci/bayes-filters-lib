@@ -11,14 +11,15 @@
  *   + https://cplusplus.github.io/LWG/lwg-active.html#2509
  *
  * Copyright Kevlin Henney, 2000, 2001, 2002. All rights reserved.
- * Copyright Claudio Fantacci, 2018. All rights reserved.
+ * Copyright Antony Polukhin, 2013-2019. All rights reserved.
+ * Copyright Claudio Fantacci, 2018-2019. All rights reserved.
  *
  * What: Variant type boost::any.
  * Who:  Contributed by Kevlin Henney,
  *       with features contributed and bugs found by Antony Polukhin, Ed Brey,
  *           Mark Rodgers, Peter Dimov and James Curran,
  *       with C++11 compiler port by Claudio Fantacci.
- * When: July 2001, April 2013 - May 2013, September 2018.
+ * When: July 2001, April 2013 - 2019.
  *
  * Distributed under the Boost Software License, Version 1.0.
  * See the following license or copy at http://www.boost.org/LICENSE_1_0.txt
@@ -70,13 +71,16 @@ namespace any
  * of the class any object. The stored instance is called the contained object.
  * Two states are equivalent if they are either both empty or if both are not
  * empty and if the contained objects are equivalent.
- * The non-member any_cast functions provide type-safe access to the contained object.
+ * The non-member any_cast functions provide type-safe access to the contained
+ * object.
  */
 class any
 {
 public:
     /**
      * Constructs an empty object.
+     *
+     * Postconditions: this->empty().
      */
     any() noexcept :
         content(nullptr)
@@ -87,6 +91,9 @@ public:
      * Copies content of other into a new instance, so that any content is equivalent
      * in both type and value to those of other prior to the constructor call,
      * or empty if other is empty.
+     *
+     * Throws: may fail with a std::bad_alloc exception or any exceptions arising
+     *         from the copy constructor of the contained type.
      */
     any(const any& other) :
         content(other.content ? other.content->clone() : nullptr)
@@ -97,6 +104,8 @@ public:
      * Moves content of other into a new instance, so that any content is equivalent
      * in both type and value to those of other prior to the constructor call,
      * or empty if other is empty.
+     *
+     * Postconditions: other->empty()
      */
     any(any&& other) noexcept :
         content(other.content)
@@ -109,6 +118,8 @@ public:
      * Constructs an object with initial content an object of type std::decay_t<ValueType>,
      * direct-initialized from std::forward<ValueType>(value). If
      * std::is_copy_constructible<std::decay_t<ValueType>>::value is false, the program is ill-formed.
+     *
+     * Throws: std::bad_alloc or any exceptions arising from the copy constructor of the contained type.
      */
     template<typename ValueType>
     any(const ValueType& value) :
@@ -120,6 +131,8 @@ public:
      * Constructs an object with initial content an object of type std::decay_t<ValueType>,
      * direct-initialized from std::forward<ValueType>(value). If
      * std::is_copy_constructible<std::decay_t<ValueType>>::value is false, the program is ill-formed.
+     *
+     * Throws: std::bad_alloc or any exceptions arising from the copy constructor of the contained type.
      */
     template<typename ValueType>
     any(ValueType&& value, typename std::enable_if<!std::is_same<any&, ValueType>::value>::type* = nullptr, typename std::enable_if<!std::is_const<ValueType>::value>::type* = nullptr) :
@@ -128,17 +141,11 @@ public:
 
 
     /**
-     * Destruct the object.
-     */
-    ~any() noexcept
-    {
-        delete content;
-    }
-
-
-    /**
      * Assigns contents to the contained value.
      * Assigns by copying the state of rhs, as if by any(rhs).swap(*this).
+     *
+     * Throws: std::bad_alloc or any exceptions arising from the copy constructor of the contained type.
+     *         Assignment satisfies the strong guarantee of exception safety.
      *
      * @param rhs object whose contained value to assign
      */
@@ -153,6 +160,8 @@ public:
      * Assigns contents to the contained value.
      * Assigns by moving the state of rhs, as if by any(std::move(rhs)).swap(*this).
      * rhs is left in a valid but unspecified state after the assignment.
+     *
+     * Postconditions: rhs->empty()
      *
      * @param rhs object whose contained value to assign
      */
@@ -170,6 +179,9 @@ public:
      * This overload only participates in overload resolution if std::decay_t<ValueType> is not
      * the same type as any and std::is_copy_constructible_v<std::decay_t<ValueType>> is true.
      *
+     * Throws: std::bad_alloc or any exceptions arising from the move or copy constructor of the contained type.
+     *         Assignment satisfies the strong guarantee of exception safety.
+     *
      * @param rhs object whose contained value to assign
      */
     template <class ValueType>
@@ -177,6 +189,15 @@ public:
     {
         any(static_cast<ValueType&&>(rhs)).swap(*this);
         return *this;
+    }
+
+
+    /**
+     * Destruct the object.
+     */
+    ~any() noexcept
+    {
+        delete content;
     }
 
 
