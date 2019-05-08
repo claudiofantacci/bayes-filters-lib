@@ -8,36 +8,46 @@
 #ifndef STATEMODEL_H
 #define STATEMODEL_H
 
-#include <Eigen/Dense>
+#include <BayesFilters/StateModelInterface.h>
+#include <BayesFilters/StateModelDecorator.h>
+
+#include <memory>
 
 namespace bfl {
     class StateModel;
 }
 
 
-class bfl::StateModel
+class bfl::StateModel : public bfl::StateModelInterface
 {
 public:
-    virtual ~StateModel() noexcept { };
+    StateModel() noexcept;
 
-    virtual void propagate(const Eigen::Ref<const Eigen::MatrixXd>& cur_states, Eigen::Ref<Eigen::MatrixXd> prop_states) = 0;
+    virtual ~StateModel() noexcept;
 
-    virtual void motion(const Eigen::Ref<const Eigen::MatrixXd>& cur_states, Eigen::Ref<Eigen::MatrixXd> mot_states) = 0;
+    void propagate(const Eigen::Ref<const Eigen::MatrixXd>& cur_states, Eigen::Ref<Eigen::MatrixXd> prop_states) override;
 
-    virtual Eigen::MatrixXd getJacobian();
+    void motion(const Eigen::Ref<const Eigen::MatrixXd>& cur_states, Eigen::Ref<Eigen::MatrixXd> mot_states) override;
 
-    virtual Eigen::VectorXd getTransitionProbability(const Eigen::Ref<const Eigen::MatrixXd>& prev_states, const Eigen::Ref<const Eigen::MatrixXd>& cur_states);
+    Eigen::MatrixXd getJacobian() override;
 
-    virtual Eigen::MatrixXd getNoiseCovarianceMatrix();
+    Eigen::VectorXd getTransitionProbability(const Eigen::Ref<const Eigen::MatrixXd>& prev_states, const Eigen::Ref<const Eigen::MatrixXd>& cur_states) override;
 
-    virtual Eigen::MatrixXd getNoiseSample(const std::size_t num);
+    Eigen::MatrixXd getNoiseCovarianceMatrix() override;
 
-    virtual bool setProperty(const std::string& property) = 0;
+    Eigen::MatrixXd getNoiseSample(const std::size_t num) override;
 
-    /**
-     * Returns the linear and circular size of the output of the state equation.
-     */
-    virtual std::pair<std::size_t, std::size_t> getOutputSize() const = 0;
+    bool setProperty(const std::string& property) override;
+
+    std::pair<std::size_t, std::size_t> getOutputSize() const override;
+
+    void decorate(std::unique_ptr<StateModelDecorator> decorator) noexcept;
+
+    StateModelInterface& state_model() noexcept;
+
+
+private:
+    std::unique_ptr<StateModelInterface> state_model_impl_;
 };
 
 #endif /* STATEMODEL_H */

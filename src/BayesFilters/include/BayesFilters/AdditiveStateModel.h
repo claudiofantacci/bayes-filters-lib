@@ -22,7 +22,7 @@ class bfl::AdditiveStateModel : public bfl::StateModel
 public:
     virtual ~AdditiveStateModel() noexcept { };
 
-    virtual void motion(const Eigen::Ref<const Eigen::MatrixXd>& cur_states, Eigen::Ref<Eigen::MatrixXd> mot_states) override;
+    void motion(const Eigen::Ref<const Eigen::MatrixXd>& cur_states, Eigen::Ref<Eigen::MatrixXd> mot_states) override;
 };
 
 #endif /* ADDITIVESTATEMODEL_H */

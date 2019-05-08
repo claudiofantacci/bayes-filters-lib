@@ -11,28 +11,6 @@ using namespace bfl;
 using namespace Eigen;
 
 
-StateModelDecorator::StateModelDecorator(std::unique_ptr<StateModel> state_model) noexcept :
-    state_model_(std::move(state_model))
-{ }
-
-
-StateModelDecorator::StateModelDecorator(StateModelDecorator&& state_model) noexcept :
-    state_model_(std::move(state_model.state_model_))
-{ }
-
-
-StateModelDecorator::~StateModelDecorator() noexcept
-{ }
-
-
-StateModelDecorator& StateModelDecorator::operator=(StateModelDecorator&& state_model) noexcept
-{
-    state_model_ = std::move(state_model.state_model_);
-
-    return *this;
-}
-
-
 void StateModelDecorator::propagate(const Ref<const MatrixXd>& cur_states, Ref<MatrixXd> prop_states)
 {
     state_model_->propagate(cur_states, prop_states);
@@ -78,4 +56,10 @@ bool StateModelDecorator::setProperty(const std::string& property)
 std::pair<std::size_t, std::size_t> StateModelDecorator::getOutputSize() const
 {
     return state_model_->getOutputSize();
+}
+
+
+void StateModelDecorator::set_state_model(std::unique_ptr<StateModelInterface> state_model) noexcept
+{
+    state_model_ = std::move(state_model);
 }

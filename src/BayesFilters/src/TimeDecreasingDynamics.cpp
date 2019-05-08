@@ -30,39 +30,37 @@ struct TimeDecreasingDynamics::ImplData
 };
 
 
-TimeDecreasingDynamics::TimeDecreasingDynamics(std::unique_ptr<StateModel> state_model, const unsigned int iterations) noexcept :
-    StateModelDecorator(std::move(state_model)),
-    pImpl_(std::unique_ptr<ImplData>(new ImplData))
+constexpr TimeDecreasingDynamics::ImplData& TimeDecreasingDynamics::impl()
 {
-    ImplData& rImpl = *pImpl_;
-
-
-    rImpl.modality_ = ImplData::Modality::Iteration;
-
-    rImpl.iterations_ = iterations;
-
-    rImpl.seconds_ = std::numeric_limits<double>::infinity();
+    return *pImpl_;
 }
 
 
-TimeDecreasingDynamics::TimeDecreasingDynamics(std::unique_ptr<StateModel> state_model, const double seconds) noexcept :
-    StateModelDecorator(std::move(state_model)),
+TimeDecreasingDynamics::TimeDecreasingDynamics(const unsigned int iterations) noexcept :
     pImpl_(std::unique_ptr<ImplData>(new ImplData))
 {
-    ImplData& rImpl = *pImpl_;
+    impl().modality_ = ImplData::Modality::Iteration;
+
+    impl().iterations_ = iterations;
+
+    impl().seconds_ = std::numeric_limits<double>::infinity();
+}
 
 
-    rImpl.modality_ = ImplData::Modality::Time;
+TimeDecreasingDynamics::TimeDecreasingDynamics(const double seconds) noexcept :
+    pImpl_(std::unique_ptr<ImplData>(new ImplData))
+{
+    impl().modality_ = ImplData::Modality::Time;
 
-    rImpl.iterations_ = std::numeric_limits<unsigned int>::max();
+    impl().iterations_ = std::numeric_limits<unsigned int>::max();
 
-    rImpl.seconds_ = std::abs(seconds);
+    impl().seconds_ = std::abs(seconds);
 
     if (seconds < 0)
     {
         std::cerr << "WARNING::TIMEDECREASINGDYNAMICS::CTOR\n";
         std::cerr << "WARNING::LOG:\n\tInput parameter `seconds` is negative. Used as positive.\n";
-        std::cerr << "WARNING::LOG:\n\tProvided: " << seconds << ". Used " << rImpl.seconds_ << "." << std::endl;
+        std::cerr << "WARNING::LOG:\n\tProvided: " << seconds << ". Used " << impl().seconds_ << "." << std::endl;
     }
 }
 
@@ -89,23 +87,20 @@ TimeDecreasingDynamics& TimeDecreasingDynamics::operator=(TimeDecreasingDynamics
 
 MatrixXd TimeDecreasingDynamics::getNoiseSample(const std::size_t num)
 {
-    ImplData& rImpl = *pImpl_;
-
-
     double damper = 1.0;
 
-    switch (rImpl.modality_)
+    switch (impl().modality_)
     {
         case ImplData::Modality::Iteration:
         {
-            damper = (rImpl.current_iterations_ <= rImpl.iterations_) ? std::exp(-rImpl.current_iterations_) : 0.0;
+            damper = (impl().current_iterations_ <= impl().iterations_) ? std::exp(-impl().current_iterations_) : 0.0;
 
             break;
         }
 
         case ImplData::Modality::Time:
         {
-            damper = (rImpl.current_seconds_ <= rImpl.seconds_) ? std::exp(-rImpl.current_seconds_) : 0.0;
+            damper = (impl().current_seconds_ <= impl().seconds_) ? std::exp(-impl().current_seconds_) : 0.0;
 
             break;
         }
@@ -120,23 +115,20 @@ MatrixXd TimeDecreasingDynamics::getNoiseSample(const std::size_t num)
 
 bool TimeDecreasingDynamics::setProperty(const std::string& property)
 {
-    ImplData& rImpl = *pImpl_;
-
-
     if (property == "tdd_reset")
     {
-        switch (rImpl.modality_)
+        switch (impl().modality_)
         {
             case ImplData::Modality::Iteration:
             {
-                rImpl.current_iterations_ = 0;
+                impl().current_iterations_ = 0;
 
                 break;
             }
 
             case ImplData::Modality::Time:
             {
-                rImpl.timer_.stop();
+                impl().timer_.stop();
 
                 break;
             }
@@ -151,21 +143,21 @@ bool TimeDecreasingDynamics::setProperty(const std::string& property)
 
     if (property == "tdd_advance")
     {
-        switch (rImpl.modality_)
+        switch (impl().modality_)
         {
             case ImplData::Modality::Iteration:
             {
-                ++rImpl.current_iterations_;
+                ++impl().current_iterations_;
 
                 break;
             }
 
             case ImplData::Modality::Time:
             {
-                rImpl.current_seconds_ = rImpl.timer_.elapsed() * 1000.0;
+                impl().current_seconds_ = impl().timer_.elapsed() * 1000.0;
 
-                if (!rImpl.timer_.is_running())
-                    rImpl.timer_.start();
+                if (!impl().timer_.is_running())
+                    impl().timer_.start();
 
                 break;
             }

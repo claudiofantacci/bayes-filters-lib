@@ -8,6 +8,7 @@
 #ifndef STATEMODELDECORATOR_H
 #define STATEMODELDECORATOR_H
 
+#include <BayesFilters/StateModelInterface.h>
 #include <BayesFilters/StateModel.h>
 
 #include <memory>
@@ -17,8 +18,11 @@ namespace bfl {
 }
 
 
-class bfl::StateModelDecorator : public StateModel
+class bfl::StateModelDecorator : public StateModelInterface
 {
+    friend class StateModel;
+
+
 public:
     void propagate(const Eigen::Ref<const Eigen::MatrixXd>& cur_states, Eigen::Ref<Eigen::MatrixXd> prop_states) override;
 
@@ -38,17 +42,23 @@ public:
 
 
 protected:
-    StateModelDecorator(std::unique_ptr<StateModel> state_model) noexcept;
+    StateModelDecorator() noexcept = default;
 
-    StateModelDecorator(StateModelDecorator&& state_model) noexcept;
+    StateModelDecorator(const StateModelDecorator& state_model) noexcept = delete;
 
-    virtual ~StateModelDecorator() noexcept;
+    StateModelDecorator& operator=(const StateModelDecorator& state_model) noexcept = delete;
 
-    StateModelDecorator& operator=(StateModelDecorator&& state_model) noexcept;
+    StateModelDecorator(StateModelDecorator&& state_model) noexcept = default;
+
+    StateModelDecorator& operator=(StateModelDecorator&& state_model) noexcept = default;
+
+    virtual ~StateModelDecorator() noexcept = default;
 
 
 private:
-    std::unique_ptr<StateModel> state_model_;
+    void set_state_model(std::unique_ptr<StateModelInterface> state_model) noexcept;
+
+    std::unique_ptr<StateModelInterface> state_model_ = nullptr;
 };
 
 #endif /* STATEMODELDECORATOR_H */
