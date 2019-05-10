@@ -50,6 +50,7 @@
 - SUKFCorrection::getNoiseCovarianceMatrix() is now virtual.
 - Removed friendships from `*Prediction` and `*Correction` classes.
 - Implemented `freeze_measurments` for `*Correction` classes.
+- Made `skip`-related variable value in `*Prediction` classes coherent with assigned values.
 - Removed decorator classes. Using decorator was an easy way of extending functionalities, but at the cost of writing erroneous behavior in the filters.
 
 ##### `Test`
