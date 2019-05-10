@@ -74,6 +74,7 @@ ParticleSet& ParticleSet::operator+=(const ParticleSet& rhs)
 ParticleSet operator+(ParticleSet lhs, const ParticleSet& rhs)
 {
     lhs += rhs;
+
     return lhs;
 }
 

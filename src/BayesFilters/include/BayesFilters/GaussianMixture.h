@@ -74,6 +74,7 @@ public:
 
     std::size_t dim_noise;
 
+
 protected:
     Eigen::MatrixXd mean_;
 
