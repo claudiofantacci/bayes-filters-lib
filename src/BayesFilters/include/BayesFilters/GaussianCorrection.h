@@ -29,6 +29,8 @@ public:
 
     virtual MeasurementModel& getMeasurementModel() = 0;
 
+    bool freeze_measurements();
+
     virtual std::pair<bool, Eigen::VectorXd> getLikelihood();
 
 protected:
@@ -40,10 +42,6 @@ protected:
 
 private:
     bool skip_ = false;
-
-    friend class GaussianCorrectionDecorator;
-
-    friend class GPFCorrection;
 };
 
 #endif /* GAUSSIANCORRECTION_H */

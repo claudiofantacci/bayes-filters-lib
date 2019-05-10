@@ -89,6 +89,7 @@ void SIS::filteringStep()
     if (getFilteringStep() != 0)
         prediction_->predict(cor_particle_, pred_particle_);
 
+    correction_->freeze_measurements();
     correction_->correct(pred_particle_, cor_particle_);
 
     /* Normalize weights using LogSumExp. */

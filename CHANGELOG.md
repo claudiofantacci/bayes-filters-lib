@@ -43,6 +43,8 @@
 - Fixed missing const(s) keywords in signature of method StateModel::getTransitionProbability().
 - Fixed missing const(s) keywords in signature of method WhiteNoiseAcceleration::getTransitionProbability().
 - SUKFCorrection::getNoiseCovarianceMatrix() is now virtual.
+- Removed friendships from `*Prediction` and `*Correction` classes.
+- Implemented `freeze_measurments` for `*Correction` classes.
 - Removed decorator classes. Using decorator was an easy way of extending functionalities, but at the cost of writing erroneous behavior in the filters.
 
 ##### `Test`

@@ -57,6 +57,8 @@ protected:
     void filteringStep() override
     {
         prediction_->predict(corrected_state_, predicted_state_);
+
+        correction_->freeze_measurements();
         correction_->correct(predicted_state_, corrected_state_);
 
         log();
