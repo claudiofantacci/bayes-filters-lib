@@ -4,6 +4,11 @@
 ##### `CMake`
 - Minor version increases since API compatibility is broken.
 
+##### `Bugfix`
+- Fixed missing const(s) keywords in signature of method StateModel::getTransitionProbability().
+- Fixed missing const(s) keywords in signature of method WhiteNoiseAcceleration::getTransitionProbability().
+- Fixed missing self-assignment check in move assignment operators.
+
 ##### `General improvements`
 - Changed any::any default pointer value to nullptr.
 
