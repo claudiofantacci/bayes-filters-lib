@@ -53,6 +53,7 @@
 - Made `skip`-related variable value in `*Prediction` classes coherent with assigned values.
 - Removed decorator classes. Using decorator was an easy way of extending functionalities, but at the cost of writing erroneous behavior in the filters.
 - Removed setters from `*Prediction` and derived classes. All the required data to create an object are passed to the constructor.
+- Removed setters from `*Correction` and derived classes. All the required data to create an object are passed to the constructor.
 
 ##### `Test`
 - Mean extraction is performed using EstimatesExtraction utilities in test_UPF.
