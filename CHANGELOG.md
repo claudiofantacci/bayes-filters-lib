@@ -54,6 +54,7 @@
 - Removed decorator classes. Using decorator was an easy way of extending functionalities, but at the cost of writing erroneous behavior in the filters.
 - Removed setters from `*Prediction` and derived classes. All the required data to create an object are passed to the constructor.
 - Removed setters from `*Correction` and derived classes. All the required data to create an object are passed to the constructor.
+- Add `Skippable` interface class to model a functionality that can be skipped on command.
 
 ##### `Test`
 - Mean extraction is performed using EstimatesExtraction utilities in test_UPF.
