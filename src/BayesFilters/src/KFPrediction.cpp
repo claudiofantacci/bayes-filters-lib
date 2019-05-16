@@ -47,7 +47,7 @@ void KFPrediction::predictStep(const GaussianMixture& prev_state, GaussianMixtur
        x_{k+1} = F_{k} x_{k}   */
     getStateModel().propagate(prev_state.mean(), pred_state.mean());
 
-    if (!getStateModel().getSkipState())
+    if (!getStateModel().is_skipping())
     {
         /* Evaluate predicted covariance.
            P_{k+1} = F_{k} * P_{k} * F_{k}' + Q */
@@ -58,7 +58,7 @@ void KFPrediction::predictStep(const GaussianMixture& prev_state, GaussianMixtur
     }
     else
     {
-        /* Assuming that also the uncertainty due to the noise is neglected if (getSkipState == true). */
+        /* Assuming that also the uncertainty due to the noise is neglected if (is_skipping == true). */
         pred_state.covariance() = prev_state.covariance();
     }
 }
