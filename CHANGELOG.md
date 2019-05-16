@@ -32,6 +32,9 @@
 - Renamed Logger::get_prefix_name() in Logger::get_file_name_prefix().
 - Logger::enable_log() now requires absolute or relative paths as input.
 - utils.h is now a template header-only utility file.
+- Add `Skipper` interface class to model skipping functionalities.
+- Add `Skippable` interface class to model a functionality that can be skipped on command.
+- Rename `Skippable::getSkipState()` in `Skippable::is_skipping()`.
 
 ##### `Filtering functions`
 - Added pure public virtual method GaussianPrediction::getStateModel() (required to properly implement GPFPrediction::getStateModel()).
@@ -54,7 +57,6 @@
 - Removed decorator classes. Using decorator was an easy way of extending functionalities, but at the cost of writing erroneous behavior in the filters.
 - Removed setters from `*Prediction` and derived classes. All the required data to create an object are passed to the constructor.
 - Removed setters from `*Correction` and derived classes. All the required data to create an object are passed to the constructor.
-- Add `Skippable` interface class to model a functionality that can be skipped on command.
 - Add `StateProcess` interface class to describe state model functionalities.
 - Add `ExogenousProcess` interface class to describe exogenous model functionalities.
 - Add `GaussianMixturePrediction` interface class to describe Gaussian mixture-based prediction functionalities.
