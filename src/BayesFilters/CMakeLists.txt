@@ -70,6 +70,8 @@ set(${LIBRARY_TARGET_NAME}_FU_HDR
         include/BayesFilters/GaussianMixture.h
         include/BayesFilters/HistoryBuffer.h
         include/BayesFilters/Logger.h
+        include/BayesFilters/Parameter.h
+        include/BayesFilters/ParameterContainer.h
         include/BayesFilters/ParticleSet.h
         include/BayesFilters/sigma_point.h
         include/BayesFilters/utils.h
@@ -130,6 +132,8 @@ set(${LIBRARY_TARGET_NAME}_FU_SRC
         src/GaussianMixture.cpp
         src/HistoryBuffer.cpp
         src/Logger.cpp
+        src/Parameter.cpp
+        src/ParameterContainer.cpp
         src/ParticleSet.cpp
         src/sigma_point.cpp
 )

@@ -44,7 +44,7 @@ public:
 
 
 protected:
-    StateModel() noexcept = default;
+    StateModel() noexcept;
 
     StateModel(const StateModel& state_model) noexcept = delete;
 

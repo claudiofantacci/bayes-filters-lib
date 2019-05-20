@@ -11,6 +11,9 @@ using namespace bfl;
 using namespace Eigen;
 
 
+StateModel::StateModel() noexcept = default;
+
+
 bool StateModel::skip(const std::string& what_step, const bool status)
 {
     if (what_step == "state")

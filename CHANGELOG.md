@@ -35,6 +35,7 @@
 - Add `Skipper` interface class to model skipping functionalities.
 - Add `Skippable` interface class to model a functionality that can be skipped on command.
 - Rename `Skippable::getSkipState()` in `Skippable::is_skipping()`.
+- Add `Parameter` and `ParameterContainer` classes to easily handle/collect parameters.
 
 ##### `Filtering functions`
 - Added pure public virtual method GaussianPrediction::getStateModel() (required to properly implement GPFPrediction::getStateModel()).
