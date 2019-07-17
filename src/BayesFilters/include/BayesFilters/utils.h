@@ -4,17 +4,6 @@
  * This software may be modified and distributed under the terms of the
  * BSD 3-Clause license. See the accompanying LICENSE file for details.
  */
-
-/**
- * Header-only utility library implementing missing features.
- *
- * What: Possible implementation of std::make_unique.
- * Who:  Contributed by Claudio Fantacci.
- * When: July 2001, April 2013 - May 2013, September 2018.
- * Doc:  See https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique.
- *       See also: https://herbsutter.com/gotw/_102/.
- *
- */
 #ifndef UTILS_H
 #define UTILS_H
 
@@ -23,6 +12,7 @@
 #include <chrono>
 #include <cmath>
 #include <memory>
+#include <string>
 
 namespace bfl
 {
@@ -330,6 +320,37 @@ private:
      */
     bool running_ = false;
 };
+
+
+/**
+ * Utility function that returns a pre-fromatted string for throwing exception reports.
+ * Carefully read the input parameter descriptions for string styling format.
+ *
+ * @param from_where Name of the throwing function with namespace. Example: "MYCLASS::METHOD", "NAMESPACE::FUNCTION".
+ * @param error_message Error message about the throwing exception. Example: "Index out of bound."
+ * @param data_log Optional additional message reporting data causing the throwing exception. Example: "Provided index: 3. Index bound: 2".
+ * 
+ * @return The throwing exeption report or "UTILS::THROW_MESSAGE::EMPTY_THROW_REPORT" if from_where or error_message are empty.
+ */
+inline std::string throw_message(const std::string& from_where, const std::string& error_message, const std::string& data_log = "")
+{
+    if (from_where.empty() || error_message.empty())
+        return "UTILS::THROW_MESSAGE::EMPTY_THROW_REPORT";
+
+    std::string message;
+
+    message = "ERROR::" + from_where + "\n";
+    message += "MESSAGE:\n";
+    message += "\t" + error_message + "\n";
+
+    if (!data_log.empty())
+    {
+        message += "LOG:\n";
+        message += "\t" + data_log + "\n";
+    }
+
+    return message;
+}
 
 }
 }
