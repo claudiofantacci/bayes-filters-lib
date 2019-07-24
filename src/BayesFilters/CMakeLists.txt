@@ -18,6 +18,12 @@ set(${LIBRARY_TARGET_NAME}_FA_HDR
         include/BayesFilters/SIS.h
 )
 
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}"
+             PREFIX "Algorithm"
+             FILES ${${LIBRARY_TARGET_NAME}_FA_HDR}
+)
+
+
 set(${LIBRARY_TARGET_NAME}_FF_HDR
         include/BayesFilters/AdditiveMeasurementModel.h
         include/BayesFilters/AdditiveStateModel.h
@@ -61,6 +67,39 @@ set(${LIBRARY_TARGET_NAME}_FF_HDR
         include/BayesFilters/WhiteNoiseAcceleration.h
 )
 
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}"
+             PREFIX "Function"
+             FILES ${${LIBRARY_TARGET_NAME}_FF_HDR}
+)
+
+
+set(${LIBRARY_TARGET_NAME}_DISTRIBUTION_HDR
+    include/BayesFilters/Distribution/ApproximateMoments.h
+    include/BayesFilters/Distribution/CauchyDistribution.h
+    include/BayesFilters/Distribution/ChiSquared.h
+    include/BayesFilters/Distribution/DecorrelatedGaussian.h
+    include/BayesFilters/Distribution/DiscreteDistribution.h
+    include/BayesFilters/Distribution/Evaluation.h
+    include/BayesFilters/Distribution/ExponentialDistribution.h
+    include/BayesFilters/Distribution/GaussianDistribution.h
+    include/BayesFilters/Distribution/JointDistributionID.h
+    include/BayesFilters/Distribution/JointDistributionIID.h
+    include/BayesFilters/Distribution/Moments.h
+    include/BayesFilters/Distribution/Sampling.h
+    include/BayesFilters/Distribution/StandardNormalDistributionMap.h
+    include/BayesFilters/Distribution/StandardNormalDistribution.h
+    include/BayesFilters/Distribution/TDistribution.h
+    include/BayesFilters/Distribution/TruncatedGaussian.h
+    include/BayesFilters/Distribution/UniformDistribution.h
+    include/BayesFilters/Distribution/UnnormalizedEvaluation.h
+)
+
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}"
+             PREFIX "Distribution"
+             FILES ${${LIBRARY_TARGET_NAME}_DISTRIBUTION_HDR}
+)
+
+
 set(${LIBRARY_TARGET_NAME}_FU_HDR
         include/BayesFilters/any.h
         include/BayesFilters/directional_statistics.h
@@ -74,14 +113,23 @@ set(${LIBRARY_TARGET_NAME}_FU_HDR
         include/BayesFilters/ParameterContainer.h
         include/BayesFilters/ParticleSet.h
         include/BayesFilters/sigma_point.h
+        include/BayesFilters/type_traits.h
         include/BayesFilters/utils.h
 )
+
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}"
+             PREFIX "Utility"
+             FILES ${${LIBRARY_TARGET_NAME}_FU_HDR}
+)
+
 
 set(${LIBRARY_TARGET_NAME}_HDR
         ${${LIBRARY_TARGET_NAME}_FA_HDR}
         ${${LIBRARY_TARGET_NAME}_FF_HDR}
+        ${${LIBRARY_TARGET_NAME}_DISTRIBUTION_HDR}
         ${${LIBRARY_TARGET_NAME}_FU_HDR}
 )
+
 
 # List of library source files
 set(${LIBRARY_TARGET_NAME}_FA_SRC
@@ -90,6 +138,11 @@ set(${LIBRARY_TARGET_NAME}_FA_SRC
         src/ParticleFilter.cpp
         src/SIS.cpp
 )
+
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}"
+             PREFIX "Algorithm"
+             FILES ${${LIBRARY_TARGET_NAME}_FA_SRC})
+
 
 set(${LIBRARY_TARGET_NAME}_FF_SRC
         src/AdditiveStateModel.cpp
@@ -125,6 +178,19 @@ set(${LIBRARY_TARGET_NAME}_FF_SRC
         src/WhiteNoiseAcceleration.cpp
 )
 
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}"
+             PREFIX "Function"
+             FILES ${${LIBRARY_TARGET_NAME}_FF_SRC})
+
+
+set(${LIBRARY_TARGET_NAME}_DISTRIBUTION_SRC
+)
+
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}"
+             PREFIX "Distribution"
+             FILES ${${LIBRARY_TARGET_NAME}_DISTRIBUTIONS_SRC})
+
+
 set(${LIBRARY_TARGET_NAME}_FU_SRC
         src/directional_statistics.cpp
         src/EstimatesExtraction.cpp
@@ -138,11 +204,18 @@ set(${LIBRARY_TARGET_NAME}_FU_SRC
         src/sigma_point.cpp
 )
 
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}"
+             PREFIX "Utility"
+             FILES ${${LIBRARY_TARGET_NAME}_FU_SRC})
+
+
 set(${LIBRARY_TARGET_NAME}_SRC
         ${${LIBRARY_TARGET_NAME}_FA_SRC}
         ${${LIBRARY_TARGET_NAME}_FF_SRC}
+        ${${LIBRARY_TARGET_NAME}_DISTRIBUTION_SRC}
         ${${LIBRARY_TARGET_NAME}_FU_SRC}
 )
+
 
 find_package(Threads REQUIRED)
 find_package(Eigen3 QUIET CONFIG)
